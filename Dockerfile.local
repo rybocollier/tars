@@ -8,6 +8,6 @@ RUN pip install pip-tools && \
 COPY ./ /src
 WORKDIR /src
 
-RUN pip install -e .
+RUN pip install --require-hashes -r /src/requirements/requirements.txt
 
 CMD ["flask", "run", "--host", "0.0.0.0"]
