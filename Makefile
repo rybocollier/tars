@@ -10,12 +10,11 @@ build:
 
 .PHONY: run
 run:
-	docker-compose up
+	./scripts/run.sh
 
 .PHONY: stop
 stop:
-	docker-compose stop
-	docker-compose down --volumes --remove-orphans --rmi all
+	./scripts/stop.sh
 
 #.PHONY: dist
 #dist:
