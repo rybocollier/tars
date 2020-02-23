@@ -1,4 +1,8 @@
+import hashlib
+import hmac
 import os
+import sys
+import time
 from flask import Flask, request, Response
 from slackclient import SlackClient
 
@@ -7,27 +11,35 @@ app = Flask(__name__)
 
 # import environment variables
 SLACK_TOKEN = os.environ.get('SLACK_TOKEN', None)
-SLACK_WEBHOOK_SECRET = os.environ.get('SLACK_WEBHOOK_SECRET', None)
+SLACK_SIGNING_SECRET = os.environ.get('SLACK_SIGNING_SECRET', None)
 
 # instantiate slack client
 slack_client = SlackClient(SLACK_TOKEN)
 
+def print_debug(input):
+    print(input, file=sys.stderr)
 
-def list_channels():
-    channels = slack_client.api_call("channels.list")
+@app.route('/slack', methods=['POST'])
+def verify_request():
+    slack_signing_secret = SLACK_SIGNING_SECRET
+    request_data = request.get_data()
+    challenge_timestamp = request.headers['X-Slack-Request-Timestamp']
+    slack_signature = request.headers['X-Slack-Signature']
+    
+    if abs(time.time() - int(challenge_timestamp)) > 60 * 5:
+        return
 
-    if channels['ok']:
-        return channels['channels']
-    return None
+    sig_basestring = str.encode('v0:' + str(challenge_timestamp) + ':') + request_data
 
-def send_message(channel_id, message):
-    slack_client.api_call(
-        "chat.postMessage",
-        channel=channel_id,
-        text=message,
-        username='pythonbot',
-        icon_emoji=':robot_face:'
-    )
+    tars_signature = 'v0=' + hmac.new(
+        str.encode(slack_signing_secret),
+        sig_basestring, hashlib.sha256
+    ).hexdigest()
+
+    if hmac.compare_digest(tars_signature, slack_signature):
+        return request_data
+    
+    return False
 
 @app.route('/', methods=['GET'])
 def test():
@@ -35,17 +47,3 @@ def test():
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-
-
-#if __name__ == "__main__":
-#    channels = list_channels()
-#
-#    if channels:
-#        for channel in channels:
-#            print(channel['name'])
-#            print(channel['id'])
-#            send_message(channel['id'], "Hello " +
-#            channel['name'] + "! It worked!")
-#        
-#    
-#        print("Unable to authenticate.")
