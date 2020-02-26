@@ -18,7 +18,8 @@ click==7.0 \
     # via flask
 flask==1.1.1 \
     --hash=sha256:13f9f196f330c7c2c5d7a5cf91af894110ca0215ac051b5844701f2bfd934d52 \
-    --hash=sha256:45eb5a6fd193d6cf7e0cf5d8a5b31f83d5faae0293695626f539a823e93b13f6
+    --hash=sha256:45eb5a6fd193d6cf7e0cf5d8a5b31f83d5faae0293695626f539a823e93b13f6 \
+    # via -r requirements/requirements.in (line 1), slackeventsapi
 idna==2.8 \
     --hash=sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407 \
     --hash=sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c \
@@ -66,16 +67,24 @@ markupsafe==1.1.1 \
     --hash=sha256:e249096428b3ae81b08327a63a485ad0878de3fb939049038579ac0ef61e17e7 \
     --hash=sha256:e8313f01ba26fbbe36c7be1966a7b7424942f670f38e666995b88d012765b9be \
     # via jinja2
+pyee==7.0.1 \
+    --hash=sha256:705806bb09bc4b17a729d9a3d19a4f4e765abd010eb18e032d72f76452d07552 \
+    --hash=sha256:b0e5b89b17c8bd52a3c6517a545187907a8c69ce90169d29ebd8d2d5d7e4bc7d \
+    # via slackeventsapi
 requests==2.22.0 \
     --hash=sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4 \
     --hash=sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31 \
-    # via slackclient
+    # via slackclient, slackeventsapi
 six==1.14.0 \
     --hash=sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a \
     --hash=sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c \
-    # via websocket-client
+    # via slackeventsapi, websocket-client
 slackclient==1.0.0 \
-    --hash=sha256:c06db3d8fcd35b48516a7451a0e905e8dd60d5b210ac37cabeb12d17ee5f6c18
+    --hash=sha256:c06db3d8fcd35b48516a7451a0e905e8dd60d5b210ac37cabeb12d17ee5f6c18 \
+    # via -r requirements/requirements.in (line 2)
+slackeventsapi==2.1.0 \
+    --hash=sha256:d415308981ff26feb9604e3f26f481447604dacec2049a953c261b61a0eb654b \
+    # via -r requirements/requirements.in (line 3)
 urllib3==1.25.8 \
     --hash=sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc \
     --hash=sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc \
