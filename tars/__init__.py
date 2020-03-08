@@ -1,11 +1,13 @@
-import hashlib
-import hmac
 import os
 import sys
 import time
 from flask import Flask, request, Response
 from slackclient import SlackClient
 from slackeventsapi import SlackEventAdapter
+
+# import tars skills
+from tars.skills.user import get_user_id, get_user_name
+from tars.skills.channel import get_channel_id, get_channel_name
 
 # instantiate flask app
 app = Flask(__name__)
@@ -30,27 +32,17 @@ def reaction_added(event_data):
 
 @slack_events_adapter.on("member_joined_channel")
 def member_joined(event_data):
-    event = event_data["event"]
-
     # match user ID to user name
-    user_data = slack_client.api_call(
-        "users.info",
-        token=SLACK_TOKEN,
-        user=event["user"],
-    )
+    user_name = get_user_name(slack_client, SLACK_TOKEN, get_user_id(event_data))
+    message = "Hello " + user_name + "." 
+    slack_client.api_call("chat.postMessage", channel=get_channel_id(event_data), text=message)
 
-    # match channel ID to channel name
-    channel_data = slack_client.api_call(
-        "channels.info",
-        token=SLACK_TOKEN,
-        channel=event["channel"],
-    )
-
-    message = "Welcome " + user_data["user"]["name"] + " to " + channel_data["channel"]["name"] + "!"
-
-    slack_client.api_call("chat.postMessage", channel=event["channel"], text=message)
-
-    return event
+@slack_events_adapter.on("member_left_channel")
+def member_left(event_data):
+    # match user ID to user name
+    user_name = get_user_name(slack_client, SLACK_TOKEN, get_user_id(event_data))
+    message = "See you on the other side " + user_name + "." 
+    slack_client.api_call("chat.postMessage", channel=get_channel_id(event_data), text=message)
 
 @app.route('/', methods=['GET'])
 def test():
