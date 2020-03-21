@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import time
@@ -7,7 +8,7 @@ from slackeventsapi import SlackEventAdapter
 
 # import tars skills
 from tars.skills.data.commands import load_commands
-from tars.skills.reddit.til import get_random_til
+from tars.skills.reddit.til import get_random_til, generate_message_block, send_til_message
 from tars.skills.slack.user import get_user_id, get_user_name
 from tars.skills.slack.channel import get_channel_id, get_channel_name
 
@@ -54,19 +55,8 @@ def conversation_router(event_data):
     if command in commands:
         if command == "til":
             til_post = get_random_til()
-            slack_client.api_call("chat.postMessage",
-                channel=get_channel_id(event_data),
-                blocks=[
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "fuck" 
-                        }
-                    }                    
-                ]
-            )
-            slack_client.api_call("chat.postMessage", channel=get_channel_id(event_data), text=til_post['title'])
+            message = generate_message_block(til_post)
+            send_til_message(slack_client, get_channel_id(event_data), til_post, message)
     else:
         message = "Command not supported." 
         slack_client.api_call("chat.postMessage", channel=get_channel_id(event_data), text=message)
