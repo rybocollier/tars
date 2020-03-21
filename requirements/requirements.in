@@ -1,3 +1,5 @@
 flask==1.1.1
+random2==1.0.1
+requests==2.23.0
 slackclient==1.0.0
 slackeventsapi==2.1.0
