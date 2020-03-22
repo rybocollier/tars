@@ -10,7 +10,7 @@ python3.7 + pip
 ngrok
 ```
 
-## Makefile commands
+## Makefile Commands
 
 ```
 - build
