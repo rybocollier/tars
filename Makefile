@@ -15,7 +15,3 @@ run:
 .PHONY: stop
 stop:
 	./scripts/stop.sh
-
-#.PHONY: dist
-#dist:
-#	docker build -t build_api:latest -f Dockerfile.local .

@@ -47,7 +47,7 @@ from the requirements/.in files.
 $ make run
 ./scripts/run.sh
 Starting ngrok in port 5000
-Ngrok url can be reached at "https://6713d9c1.ngrok.io"
+tars is live at http://c9732b2e.ngrok.io/slack/events
 
 
 Starting tars ... 
@@ -63,6 +63,5 @@ tars    |  * Debugger PIN: 100-210-009
 ```
 
 3. Log into slack and go to events subscription for tars and add the URL to the Request URL field.
-4. The full URL you will want to provide needs to match this format `https://<ngrok_domain>/slack/events`. 
-5. Slack will send a challenge request to tars, if it succeeds you can continue with local development.
-6. If the challenge request fails, look at the log output from `docker-compose` to find out why the request failed.
+4. Slack will send a challenge request to tars, if it succeeds you can continue with local development.
+5. If the challenge request fails, look at the log output from `docker-compose` to find out why the request failed.
