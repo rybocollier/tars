@@ -46,7 +46,7 @@ def get_random_til():
     return post
 
 
-def generate_message_block(post):
+def generate_til_message_block(post):
     til_post = post
     message_block = json.dumps(
         [
