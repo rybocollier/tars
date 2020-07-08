@@ -84,17 +84,21 @@ def conversation_router(event_data):
         if command == "weather":
             zipcode = get_zipcode(message_list)
 
-            weather_response = get_weather_details(
-                zipcode, OPENWEATHER_API_KEY, OPENWEATHER_ENDPOINT
-            )
+            if zipcode == False:
+                message = "Sorry Coop, the zipcode you entered is not valid."
+                slack_client.api_call(
+                    "chat.postMessage", channel=get_channel_id(event_data), text=message
+                )
+            else:
+                weather_response = get_weather_details(
+                    zipcode, OPENWEATHER_API_KEY, OPENWEATHER_ENDPOINT
+                )
 
-            message_block = generate_weather_message_block(weather_response)
+                message_block = generate_weather_message_block(weather_response)
 
-            send_weather_message(
-                slack_client, get_channel_id(event_data), message_block
-            )
-
-            print_debug(weather_response)
+                send_weather_message(
+                    slack_client, get_channel_id(event_data), message_block
+                )
     else:
         message = "Command not supported."
         slack_client.api_call(

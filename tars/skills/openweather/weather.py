@@ -8,7 +8,7 @@ def get_zipcode(message_list):
     try:
         zipcode = int(message_list[2])
     except ValueError:
-        print("Zipcode entered is not a number.")
+        return False
 
     return zipcode
 
